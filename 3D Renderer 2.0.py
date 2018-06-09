@@ -143,7 +143,7 @@ class Object():
             for o in i:
                 if type(o) != tuple:
                     point = points[o-1]
-                    listOfPoints += '[X(points['+str(o)+'].x + objects['+str(len(objects))+'].pos.x),Y(points['+str(o)+'].y) + objects['+str(len(objects))+'].pos.y],'
+                    listOfPoints += '[X(points['+str(o - 1)+'].x + objects['+str(len(objects))+'].pos.x),Y(points['+str(o - 1)+'].y) + objects['+str(len(objects))+'].pos.y],'
             listOfPoints += ']'
             sides.append('pygame.draw.polygon(screen,'+str(colours[num1])+','+listOfPoints+',0)')
             sidesOutline.append('pygame.draw.polygon(screen, (255,255,255),'+listOfPoints+',1)')
@@ -164,8 +164,8 @@ class Object():
         
         objects.append(self)
 
-Object('tinker',0,0,0)
-#Object('tinker',10,10,10)
+Object('tinker',-20,0,0)
+Object('tinker',20,0,0)
     
 #Variables regarding rotation
 right = False
