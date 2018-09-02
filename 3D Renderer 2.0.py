@@ -171,8 +171,12 @@ class Object():
         objects.append(self)
 
 #Creating objects
-Object('tinker',-20,0,0)
+Object('tinker',0,0,0)
 Object('tinker',20,0,0)
+
+#Text Stuff
+pygame.font.init()
+basicfont = pygame.font.SysFont(None, 48)
     
 #Variables regarding rotation
 right = False
@@ -215,6 +219,7 @@ pygame.display.set_caption('Renderer')
 
 #Rendering loop
 while True:
+    startTime = time.time()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -377,6 +382,8 @@ while True:
         exec(sides[sideToRender])
         if lines:
             exec(sidesOutline[sideToRender])
-    
-    
+    endTime = time.time()
+    fps = round(1/(endTime - startTime),2)
+    text = basicfont.render(str(fps), True, (255, 0, 0))
+    screen.blit(text,(0,0))
     pygame.display.update()
