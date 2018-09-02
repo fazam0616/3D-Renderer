@@ -84,15 +84,17 @@ class Object():
                 mtlfile = i[7:]
             if i[0] == 'v': #If the line starts with 'v', meaning a veritce command
                 points2.append(i[1:].split('\t\t')) #Making the points a list in the form of [x,y,z]
-        
+        #Setting up the positional list
         for i in points2:
             points.append(Point(i[0],i[1],i[2]))
         del points2
 
+        """Setting Up Colours, Through The MTL File"""
         colors = {}
-        f = open('Object Files/'+mtlfile,'r')
+        f = open('Object Files/'+mtlfile,'r') #Open The MTL File
         colorlines = f.read().split('\n')
 
+        #Getting rid of unneeded lines
         for o in range(len(colorlines)-1,-1,-1):
             if len(colorlines[o]) < 1:
                 colorlines.pop(o)
@@ -100,7 +102,8 @@ class Object():
                 colorlines.pop(o)
             elif colorlines[o][0:2] in ['Ka','d ','il']:
                 colorlines.pop(o)
-                
+
+        #Syntaxing the rgb colour recieved, and formatting it        
         catchColor = False
         for i in colorlines:
             if catchColor:
@@ -119,6 +122,8 @@ class Object():
             if i[0:6] == 'newmtl':
                 catchColor = True
                 tempName = i[7:]
+
+        #Adding the newly found material to the face property
         faceList = []
         for i in lines:
             if i[0:6] == 'usemtl':
@@ -127,7 +132,7 @@ class Object():
                 faces.append(i[1:].split('\t') + [color])
                 faceList.append(faces[-1])
                 colours.append(color)
-                
+        #making sure every number is an integer type variable        
         num1 = 0
         for i in faces:
             num2 = 0
@@ -136,7 +141,7 @@ class Object():
                     faces[num1][num2] = int(q)
                     num2 += 1
             num1 += 1            
-            
+        #Creatibg custom commands that wil render the face in the order neccesary    
         num1 = 0
         for i in faces:
             listOfPoints = '['
@@ -148,14 +153,15 @@ class Object():
             sides.append('pygame.draw.polygon(screen,'+str(colours[num1])+','+listOfPoints+',0)')
             sidesOutline.append('pygame.draw.polygon(screen, (255,255,255),'+listOfPoints+',1)')
             num1 += 1
-
+        
+        #Getting rid of extra empty points on the face lists
         for face in faceList:
             num1 = 0
             face.pop(3)
             for point in face:
                 face[num1] = int(face[num1]) - 1
                 num1 += 1
-                
+        #Final assignment of variables to the parts of the object        
         self.faces = faceList
         self.pos = Point(x,y,z)
         self.offset = []
@@ -164,6 +170,7 @@ class Object():
         
         objects.append(self)
 
+#Creating objects
 Object('tinker',-20,0,0)
 Object('tinker',20,0,0)
     
