@@ -171,12 +171,13 @@ class Object():
         objects.append(self)
 
 #Creating objects
-Object('tinker',0,0,0)
-Object('tinker',20,0,0)
+Object('cube',0,0,0)
+#Object('tinker',20,0,0)
 
 #Text Stuff
 pygame.font.init()
-basicfont = pygame.font.SysFont(None, 48)
+basicfont = pygame.font.SysFont(None, 30)
+fps = 20
     
 #Variables regarding rotation
 right = False
@@ -318,21 +319,21 @@ while True:
                 zoomin = False
     
     if not pause:
-        speed = 5
-        changeX = 5
-        changeZ = 5
+        speed = 10/fps
+        changeX = 10/fps
+        changeZ = 10/fps
         for object in objects:
             for face in object.faces:
                 for pointNum in face:
                     point = points[pointNum]
                     if left:
-                        rotX = 5
+                        rotX = 10/fps
                     if right:
-                        rotX = -5
+                        rotX = -10/fps
                     if up:
-                        rotY = 5
+                        rotY = 10/fps
                     if down:
-                        rotY = -5
+                        rotY = -10/fps
                         
                     if left or right:
                         rotated = Matrix.rotate('y',rotX,point.x,point.y,point.z)
@@ -360,12 +361,12 @@ while True:
                         point.z += changeZ
 
                     if zoomin:
-                        newPoint = Matrix.scale(1.1,1.1,1.1,point.x,point.y,point.z)
+                        newPoint = Matrix.scale(1.01,1.01,1.01,point.x,point.y,point.z)
                         point.x = newPoint[0]
                         point.y = newPoint[1]
                         point.z = newPoint[2]
                     if zoomout:
-                        newPoint = Matrix.scale(0.9,0.9,0.9,point.x,point.y,point.z)
+                        newPoint = Matrix.scale(0.99,0.99,0.99,point.x,point.y,point.z)
                         point.x = newPoint[0]
                         point.y = newPoint[1]
                         point.z = newPoint[2]
@@ -383,7 +384,11 @@ while True:
         if lines:
             exec(sidesOutline[sideToRender])
     endTime = time.time()
-    fps = round(1/(endTime - startTime),2)
-    text = basicfont.render(str(fps), True, (255, 0, 0))
-    screen.blit(text,(0,0))
+    if startTime - endTime < 0.02:
+        fps = 50
+        time.sleep(0.02 - (startTime - endTime))
+    else:
+        fps = round(1/(endTime - startTime),2)
+    informationScreen = basicfont.render("FPS: "+str(fps), True, (255, 0, 0))
+    screen.blit(informationScreen,(0,0))
     pygame.display.update()
